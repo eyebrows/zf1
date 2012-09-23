@@ -1,0 +1,47 @@
+<script type="text/javascript">
+$(function() {
+	if($.bbq.getState('loggedin')=='justnow') {
+		$.bbq.removeState('loggedin');
+		$('#messages').append($('<div>').addClass('message success hidden').text('Welcome to the Library\'s login area!'));
+		$('#messages .message').slideDown('fast');
+		hideMessages();
+	}
+});
+</script>
+<div id="books" class="page">
+	<p>
+		The following books are presently available in our library.
+	</p>
+	<ul class="boxout">
+		<?php foreach($this->all_books as $book): ?>
+		<li><?php echo $this->escape($book->getField('title')) ?> - <?php echo $this->escape($book->getReferenced('Authors')->getField('name')) ?>
+<!--
+			<ul>
+				<?php foreach($book->getDependents('BookCategories') as $book_category): ?>
+				<li><?php echo $this->escape($book_category->getReferenced('Category')->getField('name')) ?>
+				<?php endforeach ?>
+			</ul>
+-->
+		</li>
+		<?php endforeach ?>
+	</ul>
+	<p>
+		And here're all the ones that <?=$this->escape($this->highlight_author->getField('name'))?> done writed.
+	</p>
+	<ul class="boxout">
+		<?php foreach($this->highlight_author->getDependents('Books') as $book): ?>
+		<li><?php echo $this->escape($book->getField('title')) ?></li>
+		<?php endforeach ?>
+	</ul>
+	<p>
+		And here're all the ones that are in the <?=$this->escape($this->category_sf->getField('name'))?> category.
+	</p>
+	<ul class="boxout">
+		<?php foreach($this->category_sf->getDependents('BookCategories') as $book_category): ?>
+		<li><?php echo $this->escape($book_category->getReferenced('Book')->getField('title')) ?></li>
+		<?php endforeach ?>
+	</ul>
+	<p>
+		Please use the links above if you would like to register with us.
+	</p>
+</div>
